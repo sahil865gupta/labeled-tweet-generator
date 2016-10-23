@@ -26,7 +26,7 @@
 	</div>
 	<script type="text/javascript">
 
-	 var current_data;
+	 var current_data = [];
 
 		function sentiment_to_color(sentiment){
 			if(sentiment == 'positive') return 'green';
@@ -41,15 +41,30 @@
 			    dataType: 'json',
 			    type: 'GET',
 			    success: function(data) {
-			    		current_data = data['data'];
 			        var tweets = data['data'];
 			        var container = $('#tweets');
 			        var contents = '';
-			        for(i = 0; i < tweets.length; i++)
-			        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">'+ tweets[i].user + ": " + tweets[i].text + '</p>';
-			        container.html(contents);
+
+			        if(tweets !=null)
+			        {
+			        	$("#getcsv").attr("disabled", false);
+			        	$("#getcsv").css("cursor", "pointer");
+
+			        	current_data = data['data'];
+
+				        for(i = 0; i < tweets.length; i++)
+				        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">'+ tweets[i].user + ": " + tweets[i].text + '</p>';
+				        container.html(contents);
+				        $('#loading').html(data['data'].length + " Tweets loaded about "+ querystring +".");
+				    }
+
+				    else
+				    {	
+				    	current_data = [];
+				    	$("#loading").html("No tweets found ");
+				    }
 			        $('#query').val(querystring);
-			        $('#loading').html(data['count'] + " Tweets loaded about "+ querystring +".");
+			        
 			    }
 			});
 		}
@@ -83,7 +98,10 @@
 		});
 
 		$('#search').click(function(){
+			current_data = [];
 			$('#loading').html('Loading...');
+			$("#getcsv").css("cursor", "not-allowed");
+			$("#getcsv").attr("disabled", true);
 			$('#tweets').html('');
 			load_tweets($('#query').val());
 		});

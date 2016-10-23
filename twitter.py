@@ -63,7 +63,7 @@ class TwitterClient(object):
 
                 parsed_tweet['text'] = tweet.text
                 parsed_tweet['user'] = tweet.user.screen_name
-                
+
                 if self.with_sentiment == 1:
                     parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
                 else:

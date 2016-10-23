@@ -28,7 +28,7 @@ def tweets():
         api.set_query(query)
 
         tweets = api.get_tweets()
-        return jsonify({'data': tweets, 'count': len(tweets)})
+        return jsonify({'data': tweets})
 
 
 port = int(os.environ.get('PORT', 5000))
